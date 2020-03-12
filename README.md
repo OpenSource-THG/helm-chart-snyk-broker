@@ -12,7 +12,7 @@ installed and its tls certs set up under ``.
 To install the chart with the release name `my-broker-release`:
 
 ```bash
-helm upgrade [-i] --name my-broker-release <HELM_CHART> -f config/<DC>.yaml --set-file gitlab.token=<GITLAB_TOKEN_FILE> --set-file broker.token=<BROKER_TOKEN_FILE> --namespace=<NAMESPACE>
+helm upgrade [-i] --name my-broker-release . --namespace=<NAMESPACE>
 ```
 
 ### Uninstalling the Chart
