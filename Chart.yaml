@@ -1,0 +1,7 @@
+apiVersion: v1
+name: snyk-broker
+description: Snyk Broker proxies access between snyk.io and your Git repositories
+version: 0.1.0
+appVersion: 4.71.0
+sources:
+  - https://github.com/snyk/broker

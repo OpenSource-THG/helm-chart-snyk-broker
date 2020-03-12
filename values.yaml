@@ -1,0 +1,22 @@
+name: snyk-broker
+
+image:
+  tag: 4.71.0-gitlab
+  repository: snyk
+  name: broker
+  pullPolicy: IfNotPresent
+
+replicas: 1
+resources:
+  limits:
+    cpu: 300m
+    memory: 300Mi
+  requests:
+    cpu: 200m
+    memory: 200Mi
+
+broker:
+  scheme: https://
+
+port: 8000
+

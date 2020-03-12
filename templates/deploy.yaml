@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-deploy
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 20%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        image: {{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.port }}
+          protocol: TCP
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: {{ .Values.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: {{ .Values.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: BROKER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: broker-token
+              key: token
+        - name: GITLAB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: gitlab-token
+              key: token
+        - name: GITLAB
+          value: {{ .Values.gitlab.url }}
+        - name: BROKER_CLIENT_URL
+          value: {{ .Values.broker.scheme }}{{ .Values.broker.url }}
+        - name: PORT
+          value: "{{ .Values.port }}"
+        - name: CA_CERT
+          value: {{ .Values.ca }}
