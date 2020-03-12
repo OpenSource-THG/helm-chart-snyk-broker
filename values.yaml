@@ -15,8 +15,22 @@ resources:
     cpu: 200m
     memory: 200Mi
 
+#gitlab:
+#  url: your.gitlab.domain.com
+#  token: secret-gitlab-token
+
 broker:
   scheme: https://
+#  url: my.broker.client
+#  token: secret-broker-token
 
 port: 8000
+
+#ca: /private/ca.cert.pem
+
+#ingress:
+#  hosts:
+#    - my.broker.client
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
 
