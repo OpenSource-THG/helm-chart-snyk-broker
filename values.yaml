@@ -2,8 +2,7 @@ name: snyk-broker
 
 image:
   tag: 4.71.0-gitlab
-  repository: snyk
-  name: broker
+  repository: snyk/broker
   pullPolicy: IfNotPresent
 
 replicas: 1
@@ -19,18 +18,32 @@ resources:
 #  url: your.gitlab.domain.com
 #  token: secret-gitlab-token
 
-broker:
-  scheme: https://
-#  url: my.broker.client
+#broker:
+#  url: https://my.broker.client
 #  token: secret-broker-token
-
-port: 8000
 
 #ca: /private/ca.cert.pem
 
-#ingress:
+deployment:
+  annotations: {}
+  labels: {}
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+#  nodePort: 31111
+  annotations: {}
+  labels: {}
+
+ingress:
+  enabled: false
+  labels: {}
+  annotations: {}
+#    kubernetes.io/ingress.class: nginx
 #  hosts:
 #    - my.broker.client
-#  annotations:
-#    kubernetes.io/ingress.class: nginx
+#  tls:
+#    - secretName: snyk-broker-certs
+
 

@@ -4,12 +4,22 @@ metadata:
   name: {{ template "fullname" . }}
   labels:
     app: {{ .Values.name }}
+{{- if .Values.service.labels }}
+{{ toYaml .Values.service.labels | indent 4 }}
+{{- end }}
+{{- if .Values.service.annotations }}
+  annotations:
+{{ toYaml .Values.service.annotations | indent 4 }}
+{{- end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   ports:
-  - port: {{ .Values.port }}
+  - port: {{ .Values.service.port }}
     protocol: TCP
-    targetPort: {{ .Values.port }}
+    targetPort: {{ .Values.service.targetPort }}
+{{ if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
+    nodePort: {{ .Values.service.nodePort }}
+{{ end }}
   selector:
     app: {{ .Values.name }}
   sessionAffinity: None

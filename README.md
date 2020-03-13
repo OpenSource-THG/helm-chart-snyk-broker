@@ -3,16 +3,15 @@
 Helm chart used to deploy a [Snyk Broker](https://github.com/snyk/broker) into Kubernetes. Currently only supports GitLab as the SCM.
 
 ### Requirements
-This chart sets up access to the Snyk Broker service through a [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) 
-meaning that the cluster you deploy to needs to have an [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
-installed and its TLS certs set up under ``.
+
+This chart requires already having generated a Snyk Broker token and GitLab token.
 
 ### Installing the Chart
 
-To install the chart with the release name `my-broker-release`:
+At a minimum, you must provide values for `broker.token`, `broker.url`, `gitlab.token` and `broker.url`. To install the chart with the release name `my-broker-release`:
 
 ```bash
-helm upgrade [-i] --name my-broker-release . --namespace=<NAMESPACE>
+helm upgrade [-i] --name my-broker-release . -f <your-config-file>.yaml
 ```
 
 ### Uninstalling the Chart
@@ -23,23 +22,32 @@ helm delete my-broker-release
 ```
 
 ### Configuration
+
 The following table lists the configurable parameters of the Event Exporter chart and their default values.
 
-| Parameter             | Description                                                                                                          | Default value                                                                                      |
-| :-------------------- | :------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------- |
-| `name`                | Deployment name                                                                                                      | `snyk-broker`                                                                                      |
-| `image.tag`           | Broker image tag                                                                                                     | `4.71.0-gitlab`                                                                                    |
-| `image.repository`    | Name of the repository to pull the Broker image from                                                                 | `snyk`                                                                                             |
-| `image.name`          | Broker image name                                                                                                    | `broker`                                                                                           |
-| `image.pullPolicy`    | Pull policy for the image                                                                                            | `IfNotPresent`                                                                                     |
-| `replicas`            | Number of Broker replicas the cluster should aim to have running at once                                             | `1`                                                                                                |
-| `resources`           | CPU/memory resource requests/limits for the Broker                                                                   | `{ "requests": { "cpu": "200", "memory": "200Mi"}, "limits": { "cpu": "300", "memory": "300Mi" }}` |
-| `gitlab.url`          | Hostname of your GitLab deployment                                                                                   | None                                                                                               |
-| `gitlab.token`        | GitLab personal access token with `api` scope                                                                        | None                                                                                               |
-| `broker.scheme`       | Scheme to prepend to `broker.url` when providing the full address as an environment variable to the Broker instance. | `https://`                                                                                         |
-| `broker.url`          | The address at which the Broker client will be accessible                                                            | None                                                                                               |
-| `broker.token`        | Snyk Broker token                                                                                                    | None                                                                                               |
-| `port`                | Port at which the Broker client accepts connections. This is only used internally and should not affect the Ingress. | `8000`                                                                                             |
-| `ca`                  | Location (within the Broker image) to provide an internal CA certificate.                                            | None                                                                                               |
-| `ingress.hosts`       | Service host names to be used in the service Ingress                                                                 | None                                                                                               |
-| `ingress.annotations` | Any annotations to be provided to the Broker Ingress                                                                 | None                                                                                               |
+| Parameter                | Description                                                                                            | Default value                                                                   |
+| :----------------------- | :----------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
+| `name`                   | Release name                                                                                           | `snyk-broker`                                                                   |
+| `image.tag`              | Broker image tag                                                                                       | `4.71.0-gitlab`                                                                 |
+| `image.repository`       | Image repository                                                                                       | `snyk/broker`                                                                   |
+| `image.pullPolicy`       | Image pull policy                                                                                      | `IfNotPresent`                                                                  |
+| `replicas`               | Desired number of Broker pods                                                                          | `1`                                                                             |
+| `resources`              | Broker pod CPU/memory resource requests/limits                                                         | `{requests: { cpu: 200m, memory: 200Mi}, limits: { cpu: 300m, memory: 300Mi }}` |
+| `gitlab.url`             | Hostname of your GitLab deployment                                                                     | None                                                                            |
+| `gitlab.token`           | GitLab personal access token with `api` scope                                                          | None                                                                            |
+| `broker.url`             | The address at which the Broker client will be accessible                                              | None                                                                            |
+| `broker.token`           | Snyk Broker token                                                                                      | None                                                                            |
+| `ca`                     | Location (within the Broker image) to provide an internal CA certificate.                              | None                                                                            |
+| `deployment.annotations` | Deployment annotations                                                                                 | `{}`                                                                            |
+| `deployment.labels`      | Deployment labels                                                                                      | `{}`                                                                            |
+| `service.type`           | Kubernetes service type                                                                                | `ClusterIP`                                                                     |
+| `service.port`           | Kubernetes service port                                                                                | `8000`                                                                          |
+| `service.targetPort`     | Kubernetes service target port, the PORT environment variable in Broker will also be set to this value | `8000`                                                                          |
+| `service.nodePort`       | Kubernetes service node port                                                                           | None                                                                            |
+| `service.annotations`    | Kubernetes service annotations                                                                         | `{}`                                                                            |
+| `service.labels`         | Kubernetes service labels                                                                              | `{}`                                                                            |
+| `ingress.enabled`        | Enables Ingress                                                                                        | `false`                                                                         |
+| `ingress.annotations`    | Ingress annotations                                                                                    | `{}`                                                                            |
+| `ingress.labels`         | Ingress labels                                                                                         | `{}`                                                                            |
+| `ingress.hosts`          | Ingress host names                                                                                     | None                                                                            |
+| `ingress.tls`            | Ingress TLS configurations                                                                             | None                                                                            |
