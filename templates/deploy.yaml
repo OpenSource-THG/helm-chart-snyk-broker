@@ -51,13 +51,13 @@ spec:
         - name: BROKER_TOKEN
           valueFrom:
             secretKeyRef:
-              name: broker-token
-              key: token
+              name: {{ .Values.broker.secretName }}
+              key: {{ .Values.broker.secretKey }}
         - name: GITLAB_TOKEN
           valueFrom:
             secretKeyRef:
-              name: gitlab-token
-              key: token
+              name: {{ .Values.gitlab.secretName }}
+              key: {{ .Values.gitlab.secretKey }}
         - name: GITLAB
           value: {{ .Values.gitlab.url }}
         - name: BROKER_CLIENT_URL

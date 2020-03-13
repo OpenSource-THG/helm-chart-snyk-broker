@@ -14,13 +14,19 @@ resources:
     cpu: 200m
     memory: 200Mi
 
-#gitlab:
+gitlab:
 #  url: your.gitlab.domain.com
 #  token: secret-gitlab-token
+  useExistingSecret: false
+  secretName: gitlab-token
+  secretKey: token
 
-#broker:
+broker:
 #  url: https://my.broker.client
 #  token: secret-broker-token
+  useExistingSecret: false
+  secretName: broker-token
+  secretKey: token
 
 #ca: /private/ca.cert.pem
 
