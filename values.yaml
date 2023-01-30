@@ -1,7 +1,7 @@
 name: snyk-broker
 
 image:
-  tag: 4.126.2-gitlab
+  tag: 4.140.0-gitlab
   repository: snyk/broker
   pullPolicy: IfNotPresent
 
